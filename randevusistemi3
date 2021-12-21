@@ -1,0 +1,1487 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.3
+-- Dumped by pg_dump version 13.3
+
+-- Started on 2021-12-17 17:44:16
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 248 (class 1255 OID 25577)
+-- Name: hastaa(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.hastaa() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+ NEW."hasta"=UPPER(NEW."hasta");
+ RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.hastaa() OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1255 OID 25581)
+-- Name: kurumm(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.kurumm() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+ NEW."kurum"=LOWER(NEW."kurum");
+ RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.kurumm() OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1255 OID 25358)
+-- Name: listele(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.listele(prmt character varying) RETURNS TABLE(randevubilgileriid integer, tc character varying, il character varying, ilce character varying, hastane character varying, muayneyeri character varying, tarih date, saat integer)
+    LANGUAGE plpgsql
+    AS $$
+Begin
+     Return query
+	 select
+	  randevubilgileriid,
+		 tc,
+		 il,
+		 ilce,
+		 hastane,
+		 muayneyeri,
+		 tarih,
+		 saat
+from
+   randevubilgileri
+where
+tc like '%  prmt %';
+
+end;
+$$;
+
+
+ALTER FUNCTION public.listele(prmt character varying) OWNER TO postgres;
+
+--
+-- TOC entry 247 (class 1255 OID 25455)
+-- Name: randevuekle(integer, character varying, character varying, character varying, character varying, date, integer, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.randevuekle(randevubilgileriidi integer, tci character varying, ili character varying, ilcei character varying, muayneyerii character varying, tarihi date, saati integer, hastanei character varying) RETURNS TABLE(randevubilgileriid integer, tc character varying, il character varying, ilce character varying, muayneyeri character varying, tarih date, saat integer, hastane character varying)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+	
+	insert into randevubilgileri (randevubilgileriid,tc,il,ilce,muayneyeri,tarih,saat,hastane) values(randevubilgileriidi,tci,ili,ilcei,muayneyerii,tarihi,saati,hastanei);
+END;
+$$;
+
+
+ALTER FUNCTION public.randevuekle(randevubilgileriidi integer, tci character varying, ili character varying, ilcei character varying, muayneyerii character varying, tarihi date, saati integer, hastanei character varying) OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1255 OID 25568)
+-- Name: randevuguncelle(integer, character varying, character varying, character varying, character varying, date, integer, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.randevuguncelle(randevubilgileriidi integer, tci character varying, ili character varying, ilcei character varying, muayneyerii character varying, tarihi date, saati integer, hastanei character varying) RETURNS TABLE(randevubilgileriid integer, tc character varying, il character varying, ilce character varying, muayneyeri character varying, tarih date, saat integer, hastane character varying)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+update randevubilgileri set il=ili,ilce=ilcei,muayneyeri=ilcei,tarih=tarihi,saat=saati,hastane=hastanei where tc=tci;
+END;	
+$$;
+
+
+ALTER FUNCTION public.randevuguncelle(randevubilgileriidi integer, tci character varying, ili character varying, ilcei character varying, muayneyerii character varying, tarihi date, saati integer, hastanei character varying) OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1255 OID 25456)
+-- Name: randevusil(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.randevusil(tci character varying) RETURNS TABLE(randevubilgileriid integer, tc character varying, il character varying, ilce character varying, muayneyeri character varying, tarih date, saat integer, hastane character varying)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+	delete from randevubilgileri where tc=tci;
+END;
+$$;
+
+
+ALTER FUNCTION public.randevusil(tci character varying) OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1255 OID 25579)
+-- Name: ttarih(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.ttarih() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+ NEW."tarih"=NOW(NEW."tarih");
+ RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.ttarih() OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1255 OID 25575)
+-- Name: ttoplambina(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.ttoplambina() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+declare
+total_salary integer;
+begin 
+update toplambina set sayi=sayi+1;
+return new;
+end;
+$$;
+
+
+ALTER FUNCTION public.ttoplambina() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 223 (class 1259 OID 25435)
+-- Name: bina; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.bina (
+    binaid integer NOT NULL,
+    binano character varying
+);
+
+
+ALTER TABLE public.bina OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 25433)
+-- Name: bina_binaid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.bina_binaid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.bina_binaid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3186 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: bina_binaid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.bina_binaid_seq OWNED BY public.bina.binaid;
+
+
+--
+-- TOC entry 207 (class 1259 OID 25331)
+-- Name: doktor; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doktor (
+    doktorid integer NOT NULL,
+    doktoradi character varying
+);
+
+
+ALTER TABLE public.doktor OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 25329)
+-- Name: doktor_doktorid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doktor_doktorid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doktor_doktorid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3187 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: doktor_doktorid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doktor_doktorid_seq OWNED BY public.doktor.doktorid;
+
+
+--
+-- TOC entry 211 (class 1259 OID 25372)
+-- Name: hastabilgileri; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hastabilgileri (
+    hastaid integer NOT NULL,
+    ad character varying,
+    soyad character varying,
+    tc character varying
+);
+
+
+ALTER TABLE public.hastabilgileri OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 25370)
+-- Name: hastabilgileri_hastaid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hastabilgileri_hastaid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hastabilgileri_hastaid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3188 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: hastabilgileri_hastaid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hastabilgileri_hastaid_seq OWNED BY public.hastabilgileri.hastaid;
+
+
+--
+-- TOC entry 209 (class 1259 OID 25361)
+-- Name: hastane; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hastane (
+    hastaneid integer NOT NULL,
+    "hastane " character varying
+);
+
+
+ALTER TABLE public.hastane OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 25359)
+-- Name: hastane_hastaneid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hastane_hastaneid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hastane_hastaneid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3189 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: hastane_hastaneid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hastane_hastaneid_seq OWNED BY public.hastane.hastaneid;
+
+
+--
+-- TOC entry 225 (class 1259 OID 25449)
+-- Name: hastanekurum; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hastanekurum (
+    hastanekurumid integer NOT NULL
+);
+
+
+ALTER TABLE public.hastanekurum OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 25487)
+-- Name: hastanekurum_hastanekurumid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hastanekurum_hastanekurumid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hastanekurum_hastanekurumid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3190 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: hastanekurum_hastanekurumid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hastanekurum_hastanekurumid_seq OWNED BY public.hastanekurum.hastanekurumid;
+
+
+--
+-- TOC entry 224 (class 1259 OID 25446)
+-- Name: hastanepoliklinik; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hastanepoliklinik (
+    hastanepoliklinikid integer NOT NULL
+);
+
+
+ALTER TABLE public.hastanepoliklinik OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 25495)
+-- Name: hastanepoliklinik_hastanepoliklinikid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hastanepoliklinik_hastanepoliklinikid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hastanepoliklinik_hastanepoliklinikid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3191 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: hastanepoliklinik_hastanepoliklinikid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hastanepoliklinik_hastanepoliklinikid_seq OWNED BY public.hastanepoliklinik.hastanepoliklinikid;
+
+
+--
+-- TOC entry 203 (class 1259 OID 25299)
+-- Name: il; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.il (
+    ilid integer NOT NULL,
+    il character varying
+);
+
+
+ALTER TABLE public.il OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 25297)
+-- Name: il_ilid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.il_ilid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.il_ilid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3192 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: il_ilid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.il_ilid_seq OWNED BY public.il.ilid;
+
+
+--
+-- TOC entry 205 (class 1259 OID 25315)
+-- Name: ilce; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ilce (
+    ilceid integer NOT NULL,
+    ilce character varying
+);
+
+
+ALTER TABLE public.ilce OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 25313)
+-- Name: ilce_ilceid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ilce_ilceid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ilce_ilceid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3193 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: ilce_ilceid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.ilce_ilceid_seq OWNED BY public.ilce.ilceid;
+
+
+--
+-- TOC entry 219 (class 1259 OID 25413)
+-- Name: kurum; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.kurum (
+    kurumid integer NOT NULL,
+    kurum character varying
+);
+
+
+ALTER TABLE public.kurum OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 25411)
+-- Name: kurum_kurumid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.kurum_kurumid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.kurum_kurumid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3194 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: kurum_kurumid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.kurum_kurumid_seq OWNED BY public.kurum.kurumid;
+
+
+--
+-- TOC entry 213 (class 1259 OID 25383)
+-- Name: muayneyeri; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.muayneyeri (
+    muayneyerid integer NOT NULL,
+    muayneyeri character varying
+);
+
+
+ALTER TABLE public.muayneyeri OWNER TO postgres;
+
+--
+-- TOC entry 212 (class 1259 OID 25381)
+-- Name: muayneyeri_muayneyerid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.muayneyeri_muayneyerid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.muayneyeri_muayneyerid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3195 (class 0 OID 0)
+-- Dependencies: 212
+-- Name: muayneyeri_muayneyerid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.muayneyeri_muayneyerid_seq OWNED BY public.muayneyeri.muayneyerid;
+
+
+--
+-- TOC entry 221 (class 1259 OID 25424)
+-- Name: poliklinik; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.poliklinik (
+    poliklinikid integer NOT NULL,
+    poliklinik character varying
+);
+
+
+ALTER TABLE public.poliklinik OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 25422)
+-- Name: poliklinik_poliklinikid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.poliklinik_poliklinikid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.poliklinik_poliklinikid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3196 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: poliklinik_poliklinikid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.poliklinik_poliklinikid_seq OWNED BY public.poliklinik.poliklinikid;
+
+
+--
+-- TOC entry 201 (class 1259 OID 25288)
+-- Name: randevubilgileri; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.randevubilgileri (
+    randevubilgileriid integer NOT NULL,
+    tc character varying,
+    il character varying,
+    ilce character varying,
+    muayneyeri character varying,
+    tarih date,
+    saat integer,
+    hastane character varying,
+    poliklinik character varying
+);
+
+
+ALTER TABLE public.randevubilgileri OWNER TO postgres;
+
+--
+-- TOC entry 200 (class 1259 OID 25286)
+-- Name: randevubilgileri_randevubilgileriid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.randevubilgileri_randevubilgileriid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.randevubilgileri_randevubilgileriid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3197 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: randevubilgileri_randevubilgileriid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.randevubilgileri_randevubilgileriid_seq OWNED BY public.randevubilgileri.randevubilgileriid;
+
+
+--
+-- TOC entry 217 (class 1259 OID 25402)
+-- Name: saat; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.saat (
+    saatid integer NOT NULL,
+    saat character varying
+);
+
+
+ALTER TABLE public.saat OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 25400)
+-- Name: saat_saatid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.saat_saatid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.saat_saatid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3198 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: saat_saatid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.saat_saatid_seq OWNED BY public.saat.saatid;
+
+
+--
+-- TOC entry 215 (class 1259 OID 25394)
+-- Name: tarih; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tarih (
+    tarihid integer NOT NULL,
+    tarih date
+);
+
+
+ALTER TABLE public.tarih OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 25392)
+-- Name: tarih_tarihid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tarih_tarihid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tarih_tarihid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3199 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: tarih_tarihid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tarih_tarihid_seq OWNED BY public.tarih.tarihid;
+
+
+--
+-- TOC entry 229 (class 1259 OID 25571)
+-- Name: toplambina; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.toplambina (
+    sayi integer NOT NULL
+);
+
+
+ALTER TABLE public.toplambina OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 25569)
+-- Name: toplambina_sayi_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.toplambina_sayi_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.toplambina_sayi_seq OWNER TO postgres;
+
+--
+-- TOC entry 3200 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: toplambina_sayi_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.toplambina_sayi_seq OWNED BY public.toplambina.sayi;
+
+
+--
+-- TOC entry 2964 (class 2604 OID 25438)
+-- Name: bina binaid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bina ALTER COLUMN binaid SET DEFAULT nextval('public.bina_binaid_seq'::regclass);
+
+
+--
+-- TOC entry 2956 (class 2604 OID 25334)
+-- Name: doktor doktorid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doktor ALTER COLUMN doktorid SET DEFAULT nextval('public.doktor_doktorid_seq'::regclass);
+
+
+--
+-- TOC entry 2958 (class 2604 OID 25375)
+-- Name: hastabilgileri hastaid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastabilgileri ALTER COLUMN hastaid SET DEFAULT nextval('public.hastabilgileri_hastaid_seq'::regclass);
+
+
+--
+-- TOC entry 2957 (class 2604 OID 25364)
+-- Name: hastane hastaneid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane ALTER COLUMN hastaneid SET DEFAULT nextval('public.hastane_hastaneid_seq'::regclass);
+
+
+--
+-- TOC entry 2966 (class 2604 OID 25489)
+-- Name: hastanekurum hastanekurumid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastanekurum ALTER COLUMN hastanekurumid SET DEFAULT nextval('public.hastanekurum_hastanekurumid_seq'::regclass);
+
+
+--
+-- TOC entry 2965 (class 2604 OID 25497)
+-- Name: hastanepoliklinik hastanepoliklinikid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastanepoliklinik ALTER COLUMN hastanepoliklinikid SET DEFAULT nextval('public.hastanepoliklinik_hastanepoliklinikid_seq'::regclass);
+
+
+--
+-- TOC entry 2954 (class 2604 OID 25302)
+-- Name: il ilid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.il ALTER COLUMN ilid SET DEFAULT nextval('public.il_ilid_seq'::regclass);
+
+
+--
+-- TOC entry 2955 (class 2604 OID 25318)
+-- Name: ilce ilceid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ilce ALTER COLUMN ilceid SET DEFAULT nextval('public.ilce_ilceid_seq'::regclass);
+
+
+--
+-- TOC entry 2962 (class 2604 OID 25416)
+-- Name: kurum kurumid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kurum ALTER COLUMN kurumid SET DEFAULT nextval('public.kurum_kurumid_seq'::regclass);
+
+
+--
+-- TOC entry 2959 (class 2604 OID 25386)
+-- Name: muayneyeri muayneyerid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.muayneyeri ALTER COLUMN muayneyerid SET DEFAULT nextval('public.muayneyeri_muayneyerid_seq'::regclass);
+
+
+--
+-- TOC entry 2963 (class 2604 OID 25427)
+-- Name: poliklinik poliklinikid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.poliklinik ALTER COLUMN poliklinikid SET DEFAULT nextval('public.poliklinik_poliklinikid_seq'::regclass);
+
+
+--
+-- TOC entry 2953 (class 2604 OID 25291)
+-- Name: randevubilgileri randevubilgileriid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.randevubilgileri ALTER COLUMN randevubilgileriid SET DEFAULT nextval('public.randevubilgileri_randevubilgileriid_seq'::regclass);
+
+
+--
+-- TOC entry 2961 (class 2604 OID 25405)
+-- Name: saat saatid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.saat ALTER COLUMN saatid SET DEFAULT nextval('public.saat_saatid_seq'::regclass);
+
+
+--
+-- TOC entry 2960 (class 2604 OID 25397)
+-- Name: tarih tarihid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tarih ALTER COLUMN tarihid SET DEFAULT nextval('public.tarih_tarihid_seq'::regclass);
+
+
+--
+-- TOC entry 2967 (class 2604 OID 25574)
+-- Name: toplambina sayi; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.toplambina ALTER COLUMN sayi SET DEFAULT nextval('public.toplambina_sayi_seq'::regclass);
+
+
+--
+-- TOC entry 3174 (class 0 OID 25435)
+-- Dependencies: 223
+-- Data for Name: bina; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3158 (class 0 OID 25331)
+-- Dependencies: 207
+-- Data for Name: doktor; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3162 (class 0 OID 25372)
+-- Dependencies: 211
+-- Data for Name: hastabilgileri; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3160 (class 0 OID 25361)
+-- Dependencies: 209
+-- Data for Name: hastane; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3176 (class 0 OID 25449)
+-- Dependencies: 225
+-- Data for Name: hastanekurum; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3175 (class 0 OID 25446)
+-- Dependencies: 224
+-- Data for Name: hastanepoliklinik; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3154 (class 0 OID 25299)
+-- Dependencies: 203
+-- Data for Name: il; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3156 (class 0 OID 25315)
+-- Dependencies: 205
+-- Data for Name: ilce; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3170 (class 0 OID 25413)
+-- Dependencies: 219
+-- Data for Name: kurum; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3164 (class 0 OID 25383)
+-- Dependencies: 213
+-- Data for Name: muayneyeri; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3172 (class 0 OID 25424)
+-- Dependencies: 221
+-- Data for Name: poliklinik; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3152 (class 0 OID 25288)
+-- Dependencies: 201
+-- Data for Name: randevubilgileri; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (1, '1234', 'a', 'as', 'asdf', '2011-11-11', 12, NULL, NULL);
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (2, '1233', 's', 'sd', 'dfgh', '2010-10-11', 22, NULL, NULL);
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (3, '23213', 'de', 'des', 'greg', '2012-12-12', 13, NULL, NULL);
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (4, '213435467', 'sdfghjhkj', 'xcvbnmö', 'rtryhujık', '2011-10-10', 14, NULL, NULL);
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (6, '222222', 'aaaaa', 'bbbbbb', 'ddddddd', '2005-05-05', 7, 'ccccccc', NULL);
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (7, '444444', 'ffffffff', 'gggggg', 'eeeee', '2003-03-03', 5, 'vvvvvvv', NULL);
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (8, '234', 'sdf', 'dfs', 'reg', '2005-05-05', 5, 'ggf', NULL);
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (11, '11111', 'dee', 'dd', 'wed', '-infinity', 12, 'ew', 'dv');
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (13, '1212121', 'dsfdfvx', 'xdfdfbc', 'fghfjghmnvb', '2002-02-02', 22, 'fgfgbcv', 'cvb');
+INSERT INTO public.randevubilgileri (randevubilgileriid, tc, il, ilce, muayneyeri, tarih, saat, hastane, poliklinik) VALUES (16, '12323123', 'fsdffdf', 'drfdxcv', 'thrgfv', '2005-05-05', 11, 'erfdvdcs', 'fgfbgg');
+
+
+--
+-- TOC entry 3168 (class 0 OID 25402)
+-- Dependencies: 217
+-- Data for Name: saat; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3166 (class 0 OID 25394)
+-- Dependencies: 215
+-- Data for Name: tarih; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3180 (class 0 OID 25571)
+-- Dependencies: 229
+-- Data for Name: toplambina; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3201 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: bina_binaid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.bina_binaid_seq', 1, false);
+
+
+--
+-- TOC entry 3202 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: doktor_doktorid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doktor_doktorid_seq', 1, false);
+
+
+--
+-- TOC entry 3203 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: hastabilgileri_hastaid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hastabilgileri_hastaid_seq', 1, false);
+
+
+--
+-- TOC entry 3204 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: hastane_hastaneid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hastane_hastaneid_seq', 1, false);
+
+
+--
+-- TOC entry 3205 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: hastanekurum_hastanekurumid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hastanekurum_hastanekurumid_seq', 1, false);
+
+
+--
+-- TOC entry 3206 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: hastanepoliklinik_hastanepoliklinikid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hastanepoliklinik_hastanepoliklinikid_seq', 1, false);
+
+
+--
+-- TOC entry 3207 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: il_ilid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.il_ilid_seq', 1, false);
+
+
+--
+-- TOC entry 3208 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: ilce_ilceid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.ilce_ilceid_seq', 1, false);
+
+
+--
+-- TOC entry 3209 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: kurum_kurumid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.kurum_kurumid_seq', 1, false);
+
+
+--
+-- TOC entry 3210 (class 0 OID 0)
+-- Dependencies: 212
+-- Name: muayneyeri_muayneyerid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.muayneyeri_muayneyerid_seq', 1, false);
+
+
+--
+-- TOC entry 3211 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: poliklinik_poliklinikid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.poliklinik_poliklinikid_seq', 1, false);
+
+
+--
+-- TOC entry 3212 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: randevubilgileri_randevubilgileriid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.randevubilgileri_randevubilgileriid_seq', 2, true);
+
+
+--
+-- TOC entry 3213 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: saat_saatid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.saat_saatid_seq', 1, false);
+
+
+--
+-- TOC entry 3214 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: tarih_tarihid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tarih_tarihid_seq', 1, false);
+
+
+--
+-- TOC entry 3215 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: toplambina_sayi_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.toplambina_sayi_seq', 1, false);
+
+
+--
+-- TOC entry 2991 (class 2606 OID 25443)
+-- Name: bina bina_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bina
+    ADD CONSTRAINT bina_pkey PRIMARY KEY (binaid);
+
+
+--
+-- TOC entry 2975 (class 2606 OID 25339)
+-- Name: doktor doktor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doktor
+    ADD CONSTRAINT doktor_pkey PRIMARY KEY (doktorid);
+
+
+--
+-- TOC entry 2979 (class 2606 OID 25380)
+-- Name: hastabilgileri hastabilgileri_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastabilgileri
+    ADD CONSTRAINT hastabilgileri_pkey PRIMARY KEY (hastaid);
+
+
+--
+-- TOC entry 2977 (class 2606 OID 25369)
+-- Name: hastane hastane_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane
+    ADD CONSTRAINT hastane_pkey PRIMARY KEY (hastaneid);
+
+
+--
+-- TOC entry 2995 (class 2606 OID 25494)
+-- Name: hastanekurum hastanekurum_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastanekurum
+    ADD CONSTRAINT hastanekurum_pkey PRIMARY KEY (hastanekurumid);
+
+
+--
+-- TOC entry 2993 (class 2606 OID 25502)
+-- Name: hastanepoliklinik hastanepoliklinik_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastanepoliklinik
+    ADD CONSTRAINT hastanepoliklinik_pkey PRIMARY KEY (hastanepoliklinikid);
+
+
+--
+-- TOC entry 2971 (class 2606 OID 25307)
+-- Name: il il_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.il
+    ADD CONSTRAINT il_pkey PRIMARY KEY (ilid);
+
+
+--
+-- TOC entry 2973 (class 2606 OID 25323)
+-- Name: ilce ilce_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ilce
+    ADD CONSTRAINT ilce_pkey PRIMARY KEY (ilceid);
+
+
+--
+-- TOC entry 2987 (class 2606 OID 25421)
+-- Name: kurum kurum_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kurum
+    ADD CONSTRAINT kurum_pkey PRIMARY KEY (kurumid);
+
+
+--
+-- TOC entry 2981 (class 2606 OID 25391)
+-- Name: muayneyeri muayneyeri_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.muayneyeri
+    ADD CONSTRAINT muayneyeri_pkey PRIMARY KEY (muayneyerid);
+
+
+--
+-- TOC entry 2989 (class 2606 OID 25432)
+-- Name: poliklinik poliklinik_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.poliklinik
+    ADD CONSTRAINT poliklinik_pkey PRIMARY KEY (poliklinikid);
+
+
+--
+-- TOC entry 2969 (class 2606 OID 25296)
+-- Name: randevubilgileri randevubilgileri_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.randevubilgileri
+    ADD CONSTRAINT randevubilgileri_pkey PRIMARY KEY (randevubilgileriid);
+
+
+--
+-- TOC entry 2985 (class 2606 OID 25410)
+-- Name: saat saat_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.saat
+    ADD CONSTRAINT saat_pkey PRIMARY KEY (saatid);
+
+
+--
+-- TOC entry 2983 (class 2606 OID 25399)
+-- Name: tarih tarih_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tarih
+    ADD CONSTRAINT tarih_pkey PRIMARY KEY (tarihid);
+
+
+--
+-- TOC entry 3017 (class 2620 OID 25578)
+-- Name: hastabilgileri kitapkayitkontrol; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER kitapkayitkontrol BEFORE INSERT OR UPDATE ON public.hastabilgileri FOR EACH ROW EXECUTE FUNCTION public.hastaa();
+
+
+--
+-- TOC entry 3019 (class 2620 OID 25582)
+-- Name: kurum kurumad; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER kurumad BEFORE INSERT OR UPDATE ON public.kurum FOR EACH ROW EXECUTE FUNCTION public.kurumm();
+
+
+--
+-- TOC entry 3018 (class 2620 OID 25580)
+-- Name: tarih tarih; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER tarih BEFORE INSERT OR UPDATE ON public.tarih FOR EACH ROW EXECUTE FUNCTION public.ttarih();
+
+
+--
+-- TOC entry 3020 (class 2620 OID 25576)
+-- Name: bina ttoplambinatrig; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER ttoplambinatrig AFTER INSERT ON public.bina FOR EACH ROW EXECUTE FUNCTION public.ttoplambina();
+
+
+--
+-- TOC entry 3016 (class 2606 OID 25457)
+-- Name: bina bina_binaid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bina
+    ADD CONSTRAINT bina_binaid_fkey FOREIGN KEY (binaid) REFERENCES public.hastane(hastaneid) NOT VALID;
+
+
+--
+-- TOC entry 2998 (class 2606 OID 25462)
+-- Name: doktor doktor_doktorid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doktor
+    ADD CONSTRAINT doktor_doktorid_fkey FOREIGN KEY (doktorid) REFERENCES public.hastane(hastaneid) NOT VALID;
+
+
+--
+-- TOC entry 2999 (class 2606 OID 25467)
+-- Name: doktor doktor_doktorid_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doktor
+    ADD CONSTRAINT doktor_doktorid_fkey1 FOREIGN KEY (doktorid) REFERENCES public.randevubilgileri(randevubilgileriid) NOT VALID;
+
+
+--
+-- TOC entry 3000 (class 2606 OID 25472)
+-- Name: doktor doktor_doktorid_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doktor
+    ADD CONSTRAINT doktor_doktorid_fkey2 FOREIGN KEY (doktorid) REFERENCES public.poliklinik(poliklinikid) NOT VALID;
+
+
+--
+-- TOC entry 3001 (class 2606 OID 25477)
+-- Name: doktor doktor_doktorid_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doktor
+    ADD CONSTRAINT doktor_doktorid_fkey3 FOREIGN KEY (doktorid) REFERENCES public.muayneyeri(muayneyerid) NOT VALID;
+
+
+--
+-- TOC entry 3008 (class 2606 OID 25482)
+-- Name: hastabilgileri hastabilgileri_hastaid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastabilgileri
+    ADD CONSTRAINT hastabilgileri_hastaid_fkey FOREIGN KEY (hastaid) REFERENCES public.randevubilgileri(randevubilgileriid) NOT VALID;
+
+
+--
+-- TOC entry 3002 (class 2606 OID 25503)
+-- Name: hastane hastane_hastaneid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane
+    ADD CONSTRAINT hastane_hastaneid_fkey FOREIGN KEY (hastaneid) REFERENCES public.bina(binaid) NOT VALID;
+
+
+--
+-- TOC entry 3003 (class 2606 OID 25508)
+-- Name: hastane hastane_hastaneid_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane
+    ADD CONSTRAINT hastane_hastaneid_fkey1 FOREIGN KEY (hastaneid) REFERENCES public.doktor(doktorid) NOT VALID;
+
+
+--
+-- TOC entry 3004 (class 2606 OID 25513)
+-- Name: hastane hastane_hastaneid_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane
+    ADD CONSTRAINT hastane_hastaneid_fkey2 FOREIGN KEY (hastaneid) REFERENCES public.hastanekurum(hastanekurumid) NOT VALID;
+
+
+--
+-- TOC entry 3005 (class 2606 OID 25518)
+-- Name: hastane hastane_hastaneid_fkey3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane
+    ADD CONSTRAINT hastane_hastaneid_fkey3 FOREIGN KEY (hastaneid) REFERENCES public.ilce(ilceid) NOT VALID;
+
+
+--
+-- TOC entry 3006 (class 2606 OID 25523)
+-- Name: hastane hastane_hastaneid_fkey4; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane
+    ADD CONSTRAINT hastane_hastaneid_fkey4 FOREIGN KEY (hastaneid) REFERENCES public.hastanepoliklinik(hastanepoliklinikid) NOT VALID;
+
+
+--
+-- TOC entry 3007 (class 2606 OID 25528)
+-- Name: hastane hastane_hastaneid_fkey5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hastane
+    ADD CONSTRAINT hastane_hastaneid_fkey5 FOREIGN KEY (hastaneid) REFERENCES public.randevubilgileri(randevubilgileriid) NOT VALID;
+
+
+--
+-- TOC entry 2996 (class 2606 OID 25308)
+-- Name: il il_ilid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.il
+    ADD CONSTRAINT il_ilid_fkey FOREIGN KEY (ilid) REFERENCES public.randevubilgileri(randevubilgileriid) NOT VALID;
+
+
+--
+-- TOC entry 2997 (class 2606 OID 25340)
+-- Name: ilce ilce_ilceid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ilce
+    ADD CONSTRAINT ilce_ilceid_fkey FOREIGN KEY (ilceid) REFERENCES public.randevubilgileri(randevubilgileriid) NOT VALID;
+
+
+--
+-- TOC entry 3012 (class 2606 OID 25533)
+-- Name: kurum kurum_kurumid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kurum
+    ADD CONSTRAINT kurum_kurumid_fkey FOREIGN KEY (kurumid) REFERENCES public.hastanekurum(hastanekurumid) NOT VALID;
+
+
+--
+-- TOC entry 3009 (class 2606 OID 25538)
+-- Name: muayneyeri muayneyeri_muayneyerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.muayneyeri
+    ADD CONSTRAINT muayneyeri_muayneyerid_fkey FOREIGN KEY (muayneyerid) REFERENCES public.poliklinik(poliklinikid) NOT VALID;
+
+
+--
+-- TOC entry 3013 (class 2606 OID 25543)
+-- Name: poliklinik poliklinik_poliklinikid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.poliklinik
+    ADD CONSTRAINT poliklinik_poliklinikid_fkey FOREIGN KEY (poliklinikid) REFERENCES public.doktor(doktorid) NOT VALID;
+
+
+--
+-- TOC entry 3014 (class 2606 OID 25548)
+-- Name: poliklinik poliklinik_poliklinikid_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.poliklinik
+    ADD CONSTRAINT poliklinik_poliklinikid_fkey1 FOREIGN KEY (poliklinikid) REFERENCES public.hastanepoliklinik(hastanepoliklinikid) NOT VALID;
+
+
+--
+-- TOC entry 3015 (class 2606 OID 25553)
+-- Name: poliklinik poliklinik_poliklinikid_fkey2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.poliklinik
+    ADD CONSTRAINT poliklinik_poliklinikid_fkey2 FOREIGN KEY (poliklinikid) REFERENCES public.muayneyeri(muayneyerid) NOT VALID;
+
+
+--
+-- TOC entry 3011 (class 2606 OID 25558)
+-- Name: saat saat_saatid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.saat
+    ADD CONSTRAINT saat_saatid_fkey FOREIGN KEY (saatid) REFERENCES public.randevubilgileri(randevubilgileriid) NOT VALID;
+
+
+--
+-- TOC entry 3010 (class 2606 OID 25563)
+-- Name: tarih tarih_tarihid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tarih
+    ADD CONSTRAINT tarih_tarihid_fkey FOREIGN KEY (tarihid) REFERENCES public.randevubilgileri(randevubilgileriid) NOT VALID;
+
+
+-- Completed on 2021-12-17 17:44:17
+
+--
+-- PostgreSQL database dump complete
+--
+
